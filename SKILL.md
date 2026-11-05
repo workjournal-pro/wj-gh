@@ -3,7 +3,7 @@ name: wj-gh
 description: End-to-end GitHub change workflow — scope → optional issue → branch → commit (with tests) → open PR → watch CI → respond to a code-review bot → fix mechanical CI failures → reply to review comments inline → merge. Optional issue-first and journal-entry steps. Works with any GitHub repo; treats CodeRabbit (or any review bot) as an optional integration.
 metadata:
   author: Venture Squad LTD
-  version: "0.3"
+  version: "0.4"
 ---
 
 You are handling a `/wj-gh` invocation. The user is preparing to open (or has just opened) a pull request and wants the workflow driven from change to merge — and once a PR is open, wants this skill (and the agent it's loaded in) to watch CI and any code-review bot and respond to whatever lands without further prompting. The skill never opens or merges a PR on its own; acting on a check (bumping a version, fixing a review comment, retrying a failed CI job) is the agent's job, and merging is the user's call.
@@ -89,6 +89,13 @@ Updating docs **before** writing code makes them serve as your spec — discrepa
 - [ ] `gh pr create --title "<type>(<scope>): <one-line>" --body-file <path> --base <base> --head <branch>`.
 - [ ] If you need to retarget an existing PR's base and `gh pr edit --base` errors, fall back to `gh api -X PATCH repos/<owner>/<repo>/pulls/<n> -f base=<base>`.
 - [ ] PR body includes: `Closes #N` (if you have an issue), the actual verification steps you ran (not just "ran tests"), and links to any docs touched.
+- [ ] **End the PR body with the skill footer** so reviewers and tooling can tell which version of this skill produced the PR. Copy it exactly as written here, with the version number matching this file's `metadata.version` (currently 0.4):
+
+  ```
+  ---
+  Skill: `wj-gh` v0.4
+  <!-- wj-gh-skill: 0.4 -->
+  ```
 - [ ] **Switch to `/wj-gh monitor`** — the agent now owns the PR until it merges or the user stops it.
 
 ### 9. Iterate on CI + review
@@ -241,6 +248,7 @@ Run agent-browser inside WSL, not through Windows wrappers. Headless needs no di
 
 ## Notes
 
+- **Bump this skill's version on every edit.** Change `metadata.version` and the version in the step 8 PR footer together, so the footer always names the version that was followed.
 - **Versioning.** If your repo gates merges on a version bump, bump per semver: patch for bug fixes, minor for new backwards-compatible features, major for breaking changes. Bump every artifact the gate checks (package manifests, plugin/extension manifests, etc.).
 - This skill is provider-agnostic. The `gh` commands assume GitHub; adapt the equivalents if you're on another forge.
 - Report issues with this skill at <https://github.com/workjournal-pro/feedback/issues>.
