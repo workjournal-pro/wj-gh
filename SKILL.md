@@ -3,7 +3,7 @@ name: wj-gh
 description: End-to-end GitHub change workflow — scope → optional issue → branch → commit (with tests) → open PR → watch CI → respond to a code-review bot → fix mechanical CI failures → reply to review comments inline → merge. Optional issue-first and journal-entry steps. Works with any GitHub repo; treats CodeRabbit (or any review bot) as an optional integration.
 metadata:
   author: Venture Squad LTD
-  version: "0.2"
+  version: "0.3"
 ---
 
 You are handling a `/wj-gh` invocation. The user is preparing to open (or has just opened) a pull request and wants the workflow driven from change to merge — and once a PR is open, wants this skill (and the agent it's loaded in) to watch CI and any code-review bot and respond to whatever lands without further prompting. The skill never opens or merges a PR on its own; acting on a check (bumping a version, fixing a review comment, retrying a failed CI job) is the agent's job, and merging is the user's call.
@@ -80,6 +80,8 @@ Updating docs **before** writing code makes them serve as your spec — discrepa
 - [ ] Run the tests for each touched package/module. CI will run them again — local is faster for iteration.
 - [ ] **Version bump** if your repo gates merges on one (see notes on versioning below).
 - [ ] `git diff <base>...HEAD` — re-read your own diff. Catch the silly things (debug logs, commented-out code, accidentally-staged files) before reviewers do.
+- [ ] **Verify every claim in prose against the code.** For each doc, comment, help text, API spec or behaviour annotation (idempotent/read-only/destructive) you added or edited, open the implementing code, schema or validation and confirm each stated behaviour, condition (including polarity), default/precedence, parameter name and required/optional status, status code, and constraint matches. Check the annotation against real side effects, such as timestamps.
+- [ ] **Re-check absolutes and status.** Grep your new prose for "all", "every", "always" and "automatically", and confirm none has an exception in the same file or code. Mark anything not yet implemented as planned, and word guarantees you can't enforce as non-guaranteed. Make examples follow the rules stated in the same doc.
 
 ### 8. Open the PR
 
